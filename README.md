@@ -5,6 +5,8 @@ This project is a part DatetimePicker for buddhist Era
 :triangular_flag_on_post: Select Day on DateTimePicker <br>
 :triangular_flag_on_post: Select Year on DateTimePicker <br>
 
+[Information](./DateTime.tsx)
+
 ### INSTALL MUI
  ```
  npm install @mui/material @emotion/react @emotion/styled
