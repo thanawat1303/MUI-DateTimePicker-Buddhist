@@ -1,11 +1,9 @@
 # DateTimePicker Buddhist Era
-This project is a part DatetimePicker for buddhist Era
+This project is a part DatetimePicker for buddhist Era [Information Code](./DateTime.tsx) :computer:
 
 :triangular_flag_on_post: Fill in DateTime on Input Box <br>
 :triangular_flag_on_post: Select Day on DateTimePicker <br>
 :triangular_flag_on_post: Select Year on DateTimePicker <br>
-
-[Information](./DateTime.tsx)
 
 ### INSTALL MUI
  ```
