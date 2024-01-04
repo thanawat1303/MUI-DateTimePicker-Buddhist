@@ -9,16 +9,20 @@ import 'moment/locale/th';
 moment.updateLocale("th" , {
     weekdaysShort : ["อา", "จ", "อ", "พุธ", "พฤ", "ศ", "ส"]
 })
-const DatePickerFrom = ({className , Value , onChangeDate , readOnly} : {
+const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     className : string,
     Value : string,
     onChangeDate : (valueDate : string) => {}
     readOnly : boolean,
 }) => {
-    const [ StatePicker , setStatePicker ] = useState(false)
 
-    const [ ValuePicker , setValuePicker ] = useState(Value)
+    const RefPaper = createRef<HTMLDivElement>()
+
+    const [ StatePicker , setStatePicker ] = useState<Boolean>(false)
+    const [ ValuePicker , setValuePicker ] = useState<string>(Value)
     const [ ValueInput , setValueInput ] = useState<string>("")
+    const [RefCalendarHeader , setRefCalendarHeader] = useState<HTMLButtonElement | undefined>()
+
     useEffect(()=>{
         const ValueSpilt = Value.split("-")
         if(ValueSpilt[0] !== undefined) {
@@ -30,8 +34,10 @@ const DatePickerFrom = ({className , Value , onChangeDate , readOnly} : {
         setValuePicker(Value)
     } , [Value])
 
+    useEffect(()=>{
+        onChangeDate(ValuePicker)
+    } , [ValuePicker])
 
-    const [RefCalendarHeader , setRefCalendarHeader] = useState<HTMLButtonElement | undefined>()
     const CalendarHeaderLoad = useCallback((node : HTMLButtonElement)=>{
         setHeader(node)
         setRefCalendarHeader(node)
@@ -70,7 +76,6 @@ const DatePickerFrom = ({className , Value , onChangeDate , readOnly} : {
         setValuePicker(newDate.toISOString())
     }
 
-    const RefPaper = createRef<HTMLDivElement>()
     const HandleViewDatePicker = (view : any) => {
         if(view === "year") {
             setTimeout(()=>{
@@ -81,10 +86,6 @@ const DatePickerFrom = ({className , Value , onChangeDate , readOnly} : {
             } , 1)
         }
     }
-
-    useEffect(()=>{
-        onChangeDate(ValuePicker)
-    } , [ValuePicker])
 
     return(
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="th">
@@ -125,3 +126,5 @@ const DatePickerFrom = ({className , Value , onChangeDate , readOnly} : {
         </LocalizationProvider>
     )
 }
+
+export default DatePickerBuddhist

@@ -1,7 +1,7 @@
 # DateTimePicker
   - Date Time Buddhist Year 
-  - Input Date <i class="fa-solid fa-circle-check"></i>
-  - Select Picker Date <i class="fa-solid fa-circle-check"></i>
+  - Input Date
+  - Select Picker Date
 
 ## INSTALL MUI-LIBRARY DatePicker
  ```
