@@ -20,5 +20,6 @@ This project is a part DatetimePicker for buddhist Era
  npm i moment
  ```
 
-### Example UI
+### Examples UI
 ![](./Image/Ex.png)
+![](./Image/Ex2.png)
