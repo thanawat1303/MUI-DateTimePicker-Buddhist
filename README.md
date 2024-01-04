@@ -1,8 +1,8 @@
 # DateTimePicker Buddhist Era
 This project is a part DatetimePicker for buddhist Era
 
-:ballot_box_with_check: Fill in DateTime on Input Box
-:ballot_box_with_check: Select DateTime
+:triangular_flag_on_post: Fill in DateTime on Input Box <br>
+:triangular_flag_on_post: Select DateTime
 
 ## INSTALL MUI
  ```
