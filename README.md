@@ -1,7 +1,6 @@
 # DateTimePicker
-  - Date Time Buddhist Year 
-  - Input Date
-  - Select Picker Date
+  :ballot_box_with_check: Input Date
+  :ballot_box_with_check: Select Picker Date
 
 ## INSTALL MUI
  ```

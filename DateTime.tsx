@@ -23,7 +23,7 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     const [RefCalendarHeader , setRefCalendarHeader] = useState<HTMLButtonElement | undefined>()
 
     useEffect(()=>{
-        const ValueSpilt = Value ? Value.split("-") : [];
+        const ValueSpilt : string[] = Value ? Value.split("-") : [];
         if(ValueSpilt[0] !== undefined) {
             ValueSpilt[0] = (parseInt(ValueSpilt[0]) + 543).toString()
             const newDate = ValueSpilt.join("-")
@@ -89,7 +89,7 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
                 slotProps={{
                     textField : { 
                         size : "small" , 
-                        placeholder : "วัน/เดือน/ปี" ,
+                        placeholder : "thanawat@dev" ,
                         value : ValueInput ? moment(`${ValueInput}`) : null,
                         error : false
                     },
