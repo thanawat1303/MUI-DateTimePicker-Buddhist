@@ -2,14 +2,15 @@ import React, { createRef, useCallback, useEffect, useState } from 'react'
 
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers';
-import moment from 'moment';
+import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers';
+import moment, { Moment } from 'moment';
 import 'moment/locale/th';
 
 moment.updateLocale("th" , {
     weekdaysShort : ["อา", "จ", "อ", "พุธ", "พฤ", "ศ", "ส"]
 })
-const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
+
+const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
     className : string,
     Value : string,
     onChangeDate : (valueDate : string) => {}
@@ -18,24 +19,24 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     const RefPaper = createRef<HTMLDivElement>()
 
     const [ StatePicker , setStatePicker ] = useState<boolean>(false)
-    const [ ValuePicker , setValuePicker ] = useState<string>(Value)
+    const [ ValuePicker , setValuePicker ] = useState<string>(props.Value)
     const [ ValueInput , setValueInput ] = useState<string>("")
     const [RefCalendarHeader , setRefCalendarHeader] = useState<HTMLButtonElement | undefined>()
 
     useEffect(()=>{
-        const ValueSpilt : string[] = Value ? Value.split("-") : [];
+        const ValueSpilt : string[] = props.Value ? props.Value.split("-") : [];
         if(ValueSpilt[0] !== undefined) {
             ValueSpilt[0] = (parseInt(ValueSpilt[0]) + 543).toString()
             const newDate = ValueSpilt.join("-")
             setValueInput(newDate)
         } else setValueInput("")
 
-        setValuePicker(Value)
-    } , [Value])
+        setValuePicker(props.Value)
+    } , [props.Value])
 
     useEffect(()=>{
-        if(onChangeDate && ValuePicker) onChangeDate(ValuePicker)
-    } , [ValuePicker , onChangeDate])
+        if(props.onChangeDate && ValuePicker) props.onChangeDate(new Date(ValuePicker).toString())
+    } , [ValuePicker , props.onChangeDate])
 
     const setHeader = useCallback((node : HTMLButtonElement | null)=>{
         setTimeout(()=>{
@@ -85,6 +86,7 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     return(
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="th">
             <DateTimePicker
+                {...props}
                 dayOfWeekFormatter={(day : string , date : any)=>day}
                 slotProps={{
                     textField : { 
@@ -111,11 +113,11 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
 
                 onChange={HandleDateChangeInput}
                 onViewChange={HandleViewDatePicker}
-                className={className}
+                className={props.className}
                 ampm={false}
                 format='DD MMMM YYYY HH:mm'
                 value={ValuePicker ? moment(`${ValuePicker}`) : moment()}
-                readOnly={readOnly}
+                readOnly={props.readOnly}
             />
         </LocalizationProvider>
     )
