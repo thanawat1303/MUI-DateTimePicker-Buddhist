@@ -1,6 +1,6 @@
 # DateTimePicker
-:ballot_box_with_check: Input Date
-:ballot_box_with_check: Select Picker Date
+:ballot_box_with_check: Fill in DateTime on Input Box
+:ballot_box_with_check: Select DateTime 
 
 ## INSTALL MUI
  ```
@@ -16,3 +16,6 @@
  ```
  npm i moment
  ```
+
+## Example
+![](./Image/Ex.png)
