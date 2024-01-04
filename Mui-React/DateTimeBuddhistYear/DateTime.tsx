@@ -45,7 +45,7 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     const setHeader = useCallback((node : HTMLButtonElement | null)=>{
         setTimeout(()=>{
             const nodeRef = node ?? RefCalendarHeader
-            if(nodeRef !== undefined) {
+            if(nodeRef !== undefined && nodeRef !== null) {
                 const Label = nodeRef.querySelector(".CalendarHeader-label")
                 const ArrLebel = Label?.innerHTML.split(" ")
                 if(ArrLebel !== undefined && Label) {
@@ -60,7 +60,6 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     const HandleDateChangeInput = (event : any) => {
         const valueDate = event._d
         const DateTime = new Date(valueDate)
-        const DateTimeValue = new Date(valueDate)
 
         // ใช้ StatePicker ตรวจสอบว่าเป็นการเลือกจาก datepicker หรือ พิมพ์เอง
         const newYearInput = StatePicker ? DateTime.getFullYear() + 543 : DateTime.getFullYear() 
@@ -70,7 +69,7 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
             // ค่าใน datetime convert ปีเมื่อเกิดจากการพิมพ์ และไม่ convert ปี เมื่อเกิดจากการเลือกจาก datetime
             // เพราะตัว componant จะอ่านค่าด้วยระบบปี คศ. จึงเมื่อจะนำไปใช้งาน จำเป็นจะต้องแปลงปี พศ. ที่ผู้ใช้พิมพ์ เป็นปี คศ. ก่อน 
 
-        const newDateInput = new Date(DateTimeValue.setFullYear(newYearInput))
+        const newDateInput = new Date(DateTime.setFullYear(newYearInput))
         const newDate = new Date(DateTime.setFullYear(newYear > 0 ? newYear : newYear + 543))
         setValueInput(newDateInput.toISOString())
         setValuePicker(newDate.toISOString())
