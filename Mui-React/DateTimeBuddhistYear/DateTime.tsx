@@ -15,10 +15,9 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
     onChangeDate : (valueDate : string) => {}
     readOnly : boolean,
 }) => {
-
     const RefPaper = createRef<HTMLDivElement>()
 
-    const [ StatePicker , setStatePicker ] = useState<Boolean>(false)
+    const [ StatePicker , setStatePicker ] = useState<boolean>(false)
     const [ ValuePicker , setValuePicker ] = useState<string>(Value)
     const [ ValueInput , setValueInput ] = useState<string>("")
     const [RefCalendarHeader , setRefCalendarHeader] = useState<HTMLButtonElement | undefined>()
@@ -36,12 +35,8 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
 
     useEffect(()=>{
         onChangeDate(ValuePicker)
-    } , [ValuePicker])
+    } , [ValuePicker , onChangeDate])
 
-    const CalendarHeaderLoad = useCallback((node : HTMLButtonElement)=>{
-        setHeader(node)
-        setRefCalendarHeader(node)
-    } , [])
     const setHeader = useCallback((node : HTMLButtonElement | null)=>{
         setTimeout(()=>{
             const nodeRef = node ?? RefCalendarHeader
@@ -56,6 +51,10 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
             }
         } , 1)
     } , [RefCalendarHeader])
+    const CalendarHeaderLoad = useCallback((node : HTMLButtonElement)=>{
+        setHeader(node)
+        setRefCalendarHeader(node)
+    } , [])
 
     const HandleDateChangeInput = (event : any) => {
         const valueDate = event._d
@@ -75,10 +74,10 @@ const DatePickerBuddhist = ({className , Value , onChangeDate , readOnly} : {
         setValuePicker(newDate.toISOString())
     }
 
-    const HandleViewDatePicker = (view : any) => {
+    const HandleViewDatePicker = (view : string) => {
         if(view === "year") {
             setTimeout(()=>{
-                RefPaper.current?.querySelectorAll(".MuiPickersYear-yearButton").forEach((ele , key , parent)=>{
+                RefPaper.current?.querySelectorAll(".MuiPickersYear-yearButton").forEach((ele : Element)=>{
                     const newYear = parseInt(ele.innerHTML) + 543
                     ele.innerHTML = newYear.toString()
                 })
