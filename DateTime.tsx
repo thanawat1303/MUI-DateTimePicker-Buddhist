@@ -1,4 +1,4 @@
-import React, { createRef, useCallback, useEffect, useState } from 'react'
+import React from 'react'
 
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -16,14 +16,14 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
     onChangeDate : (valueDate : string) => {}
     readOnly : boolean,
 }) => {
-    const RefPaper = createRef<HTMLDivElement>()
+    const RefPaper = React.createRef<HTMLDivElement>()
 
-    const [ StatePicker , setStatePicker ] = useState<boolean>(false)
-    const [ ValuePicker , setValuePicker ] = useState<string>(props.Value)
-    const [ ValueInput , setValueInput ] = useState<string>("")
-    const [RefCalendarHeader , setRefCalendarHeader] = useState<HTMLButtonElement | undefined>()
+    const [ StatePicker , setStatePicker ] = React.useState<boolean>(false)
+    const [ ValuePicker , setValuePicker ] = React.useState<string>(props.Value)
+    const [ ValueInput , setValueInput ] = React.useState<string>("")
+    const [RefCalendarHeader , setRefCalendarHeader] = React.useState<HTMLButtonElement | undefined>()
 
-    useEffect(()=>{
+    React.useEffect(()=>{
         const ValueSpilt : string[] = props.Value ? props.Value.split("-") : [];
         if(ValueSpilt[0] !== undefined) {
             ValueSpilt[0] = (parseInt(ValueSpilt[0]) + 543).toString()
@@ -34,25 +34,25 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
         setValuePicker(props.Value)
     } , [props.Value])
 
-    useEffect(()=>{
+    React.useEffect(()=>{
         if(props.onChangeDate && ValuePicker) props.onChangeDate(new Date(ValuePicker).toString())
     } , [ValuePicker , props.onChangeDate])
 
-    const setHeader = useCallback((node : HTMLButtonElement | null)=>{
+    const setHeader = React.useCallback((node : HTMLButtonElement | null)=>{
         setTimeout(()=>{
             const nodeRef = node ?? RefCalendarHeader
             if(nodeRef !== undefined && nodeRef !== null) {
                 const Label = nodeRef.querySelector(".CalendarHeader-label")
                 const ArrLebel = Label?.innerHTML.split(" ")
                 if(ArrLebel !== undefined && Label) {
-                    ArrLebel[1] = (parseInt(ArrLebel[1]) + 543).toString()
+                    ArrLebel[1] = (parseInt(ArrLebel[1]) > 543 ? parseInt(ArrLebel[1]) + 543 : parseInt(ArrLebel[1])).toString()
                     const newYear = ArrLebel.join(" ")
                     Label.innerHTML = newYear
                 }
             }
         } , 1)
     } , [RefCalendarHeader])
-    const CalendarHeaderLoad = useCallback((node : HTMLButtonElement)=>{
+    const CalendarHeaderLoad = React.useCallback((node : HTMLButtonElement)=>{
         setHeader(node)
         setRefCalendarHeader(node)
     } , [])
@@ -66,7 +66,8 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
             const newYear = !StatePicker ? DateTime.getFullYear() - 543 : DateTime.getFullYear()
 
             const newDateInput = new Date(DateTime.setFullYear(newYearInput))
-            const newDate = new Date(DateTime.setFullYear(newYear > 0 ? newYear : newYear + 543))
+            const newDate = new Date(DateTime.setFullYear(newYear > 0 ? newYear : 0))
+
             setValueInput(newDateInput.toISOString())
             setValuePicker(newDate.toISOString())
         }
@@ -116,7 +117,7 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
                 className={props.className}
                 ampm={false}
                 format='DD MMMM YYYY HH:mm'
-                value={ValuePicker ? moment(`${ValuePicker}`) : moment()}
+                value={ValuePicker ? moment(`${ValuePicker}`) : null}
                 readOnly={props.readOnly}
             />
         </LocalizationProvider>

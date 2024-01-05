@@ -22,4 +22,5 @@ This project is a part DatetimePicker for buddhist Era [Information Code](./Date
 
 ### Examples UI
 ![](./Image/Ex.png)
+![](./Image/Ex3.png)
 ![](./Image/Ex2.png)
