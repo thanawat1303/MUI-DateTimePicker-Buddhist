@@ -13,8 +13,8 @@ moment.updateLocale("th" , {
 const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
     className : string,
     Value : string,
-    OnChangeDate : (valueDate : string) => void,
-    OnAcceptDate : (valueDate : string) => void
+    OnChangeDate? : (valueDate : string) => void,
+    OnAcceptDate? : (valueDate : string) => void
     readOnly : boolean,
 }) => {
     const RefPaper = React.createRef<HTMLDivElement>()
@@ -109,7 +109,7 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
                 }}
                 onOpen={()=>setStatePicker(true)}
                 onClose={()=>setStatePicker(false)}
-                onAccept={(event)=>event ? props.OnAcceptDate(new Date(event["_d"]).toISOString()) : null}
+                onAccept={(event)=>event && props.OnAcceptDate ? props.OnAcceptDate(new Date(event["_d"]).toISOString()) : null}
 
                 onYearChange={()=>setHeader(null)}
                 onMonthChange={()=>setHeader(null)}
