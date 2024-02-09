@@ -5,6 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers';
 import moment, { Moment } from 'moment';
 import 'moment/locale/th';
+import { FilledTextFieldProps, OutlinedTextFieldProps, StandardTextFieldProps } from '@mui/material';
 
 moment.updateLocale("th" , {
     weekdaysShort : ["อา", "จ", "อ", "พุธ", "พฤ", "ศ", "ส"]
@@ -16,6 +17,7 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
     OnChangeDate? : (valueDate : string) => void,
     OnAcceptDate? : (valueDate : string) => void
     readOnly : boolean,
+    propsInput? : FilledTextFieldProps | OutlinedTextFieldProps | StandardTextFieldProps;
 }) => {
     const RefPaper = React.createRef<HTMLDivElement>()
 
@@ -95,7 +97,8 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
                         size : "small" , 
                         placeholder : "thanawat@dev" ,
                         value : ValueInput ? moment(`${ValueInput}`) : null,
-                        error : false
+                        error : false,
+                        ...props.propsInput
                     },
                     calendarHeader : {
                         ref : CalendarHeaderLoad,
