@@ -7,60 +7,77 @@ import moment, { Moment } from 'moment';
 import 'moment/locale/th';
 import { FilledTextFieldProps, OutlinedTextFieldProps, StandardTextFieldProps } from '@mui/material';
 
+const DayOfWeek = ["อา", "จ", "อ", "พุธ", "พฤ", "ศ", "ส"]
 moment.updateLocale("th" , {
-    weekdaysShort : ["อา", "จ", "อ", "พุธ", "พฤ", "ศ", "ส"]
+    weekdaysShort : DayOfWeek
 })
 
 const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
-    className : string,
-    Value : string,
-    OnChangeDate? : (valueDate : string) => void,
-    OnAcceptDate? : (valueDate : string) => void
-    readOnly : boolean,
+    className? : string;
+    Value : string;
+    OnChangeDate? : (Date : Date) => void;
+    OnAcceptDate? : (Date : Date) => void;
+    readOnly? : boolean;
+    placeholder? : string;
+    size? : "small" | "medium";
     propsInput? : FilledTextFieldProps | OutlinedTextFieldProps | StandardTextFieldProps;
 }) => {
+    const {className , Value , OnChangeDate , OnAcceptDate , readOnly , placeholder , size , propsInput , ...propsDate } = props
+    
     const RefPaper = React.createRef<HTMLDivElement>()
 
     const [ StatePicker , setStatePicker ] = React.useState<boolean>(false)
-    const [ ValuePicker , setValuePicker ] = React.useState<string>(props.Value)
+    const [ ValuePicker , setValuePicker ] = React.useState<string>(
+        new Date(Value).toString() !== "Invalid Date" ? new Date(Value).toISOString() : ""
+    )
     const [ ValueInput , setValueInput ] = React.useState<string>("")
-    const [RefCalendarHeader , setRefCalendarHeader] = React.useState<HTMLButtonElement | undefined>()
+    const [RefCalendarHeader , setRefCalendarHeader] = React.useState<HTMLDivElement | undefined>()
 
     React.useEffect(()=>{
-        const ValueSpilt : string[] = props.Value ? props.Value.split("-") : [];
-        if(ValueSpilt[0] !== undefined) {
-            ValueSpilt[0] = (parseInt(ValueSpilt[0]) + 543).toString()
-            const newDate = ValueSpilt.join("-")
-            setValueInput(newDate)
-        } else setValueInput("")
-
-        setValuePicker(props.Value)
-    } , [props.Value])
+        const DateValue = new Date(Value)
+        if(DateValue.toString() !== "Invalid Date") {
+            const ValueSpilt : string[] = DateValue ? DateValue.toISOString().split("-") : [];
+            if(ValueSpilt[0] !== undefined) {
+                if(parseInt(ValueSpilt[0])) {
+                    ValueSpilt[0] = (parseInt(ValueSpilt[0]) + 543).toString()
+                    const newDate = ValueSpilt.join("-")
+                    setValueInput(newDate)
+                }
+            } else setValueInput("")
+    
+            setValuePicker(DateValue.toISOString())
+        }
+    } , [Value])
 
     React.useEffect(()=>{
-        if(props.OnChangeDate && ValuePicker) props.OnChangeDate(new Date(ValuePicker).toString())
-    } , [ValuePicker , props.OnChangeDate])
+        const DateValue = new Date(Value)
+        const newValue = DateValue.toString() !== "Invalid Date" ? DateValue.toISOString() : "";
+        (OnChangeDate && ValuePicker && ValuePicker !== newValue) && OnChangeDate(new Date(ValuePicker))
+    } , [ValuePicker , Value , OnChangeDate])
 
-    const setHeader = React.useCallback((node : HTMLButtonElement | null)=>{
+    const setHeader = React.useCallback((node : HTMLDivElement | null)=>{
         setTimeout(()=>{
             const nodeRef = node ?? RefCalendarHeader
             if(nodeRef !== undefined && nodeRef !== null) {
                 const Label = nodeRef.querySelector(".CalendarHeader-label")
-                const ArrLebel = Label?.innerHTML.split(" ")
-                if(ArrLebel !== undefined && Label) {
-                    ArrLebel[1] = (parseInt(ArrLebel[1]) > 543 ? parseInt(ArrLebel[1]) + 543 : parseInt(ArrLebel[1])).toString()
-                    const newYear = ArrLebel.join(" ")
+                const LabelSplitCalendar = Label?.innerHTML.split(" ")
+                if(LabelSplitCalendar !== undefined && Label) {
+                    LabelSplitCalendar[1] = (parseInt(LabelSplitCalendar[1]) > 543 ? parseInt(LabelSplitCalendar[1]) + 543 : parseInt(LabelSplitCalendar[1])).toString()
+                    const newYear = LabelSplitCalendar.join(" ")
                     Label.innerHTML = newYear
                 }
             }
         } , 1)
     } , [RefCalendarHeader])
-    const CalendarHeaderLoad = React.useCallback((node : HTMLButtonElement)=>{
+
+    const CalendarHeaderLoad = React.useCallback((node : HTMLDivElement)=>{
         setHeader(node)
         setRefCalendarHeader(node)
     } , [])
 
     const HandleDateChangeInput = (event : any) => {
+        if(!event) return 0
+
         const valueDate = event._d
         if(valueDate.toString() !== "Invalid Date") {
             const DateTime = new Date(valueDate)
@@ -90,15 +107,15 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
     return(
         <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="th">
             <DateTimePicker
-                {...props}
-                dayOfWeekFormatter={(day : string , date : any)=>day}
+                {...propsDate}
+                dayOfWeekFormatter={(date : Moment)=>DayOfWeek[date.day()]}
                 slotProps={{
                     textField : { 
-                        size : "small" , 
-                        placeholder : "thanawat@dev" ,
+                        size : size ? size : "small" , 
+                        placeholder : placeholder ? placeholder : "thanawat@dev" ,
                         value : ValueInput ? moment(`${ValueInput}`) : null,
                         error : false,
-                        ...props.propsInput
+                        ...propsInput
                     },
                     calendarHeader : {
                         ref : CalendarHeaderLoad,
@@ -112,18 +129,18 @@ const DatePickerBuddhist = (props : DateTimePickerProps<Moment> & {
                 }}
                 onOpen={()=>setStatePicker(true)}
                 onClose={()=>setStatePicker(false)}
-                onAccept={(event)=>event && props.OnAcceptDate ? props.OnAcceptDate(new Date(event["_d"]).toISOString()) : null}
+                onAccept={(event)=>event && OnAcceptDate ? OnAcceptDate(new Date(event["_d"])) : null}
 
                 onYearChange={()=>setHeader(null)}
                 onMonthChange={()=>setHeader(null)}
 
                 onChange={HandleDateChangeInput}
                 onViewChange={HandleViewDatePicker}
-                className={props.className}
+                className={className}
                 ampm={false}
                 format='DD MMMM YYYY HH:mm'
                 value={ValuePicker ? moment(`${ValuePicker}`) : null}
-                readOnly={props.readOnly}
+                readOnly={readOnly}
             />
         </LocalizationProvider>
     )

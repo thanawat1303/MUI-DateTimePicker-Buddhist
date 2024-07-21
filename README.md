@@ -12,14 +12,22 @@ This project is a part DatetimePicker for buddhist Era [Information Code](./Date
 
 ### INSTALL MUI-LIBRARY DatePicker
  ```
- npm i @mui/x-date-pickers
+ npm install @mui/x-date-pickers@7.11.0
  ```
 
 ### INSTALL MOMENT ADAPTER
  ```
- npm i moment
+ npm install moment@2.30.1
  ```
 
+### Example Code
+ ```javascript
+    const [ getValue , setValue ] = React.useState("")
+    <DatePickerBuddhist
+        Value={getValue}
+        OnChangeDate={setValue}
+    />
+ ```
 ### Examples UI
 ![](./Image/Ex.png)
 ![](./Image/Ex3.png)
